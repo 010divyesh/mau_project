@@ -2,12 +2,12 @@ export default function Nav() {
     return (
       <ul className="nav bg-dark justify-content-center mb-2">
         <li className="nav-item">
-          <a className="nav-link active" aria-current="page" href="#">
+          <a className="nav-link active" aria-current="page">
             <img
-              src="./icons/Logo.jpg"
+              src="./icon/trace.svg"
               style={{
-                height: "50px",
-                width: "90px",
+                height: "45px",
+                width: "95px",
               }}
             />
           </a>

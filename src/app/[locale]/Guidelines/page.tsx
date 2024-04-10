@@ -1,83 +1,79 @@
+"use client";
+import { useTranslations } from "next-intl";
+
 export default function Guidelines() {
+
+  const t = useTranslations('Index.Guidelines')
+
     return (
       <div className="container">
-        <h5 className="fw-bold text-center my-3">Terms and Conditions</h5>
+        <h5 className="fw-bold text-center my-3">{t('heading')}</h5>
         <ol className="list-group list-group-numbered my-2">
           <li className="list-group-item d-flex justify-content-between align-items-start">
             <div className="ms-2 me-auto">
-              Surgeries would happen at ART Manjari.
+            {t('step_1')}
             </div>
           </li>
           <li className="list-group-item d-flex justify-content-between align-items-start">
             <div className="ms-2 me-auto">
-              You are sending your cats without any blood test or Tri cat vaccine
-              is at your risk.
+            {t('step_2')}
             </div>
           </li>
           <li className="list-group-item d-flex justify-content-between align-items-start">
             <div className="ms-2 me-auto">
-              Surgeries for Female cat would be free but for male cat, they would
-              be chargeable at a subsidized cost of 700.
+            {t('step_3')}
             </div>
           </li>
           <li className="list-group-item d-flex justify-content-between align-items-start">
             <div className="ms-2 me-auto">
-              . Form will not be accepted without id proof and GPS location.
+            {t('step_4')}
             </div>
           </li>
           <li className="list-group-item d-flex justify-content-between align-items-start">
             <div className="ms-2 me-auto">
-              If the form is not filled out within 3 days you get it, you will be
-              blocked and banned.
+            {t('step_5')}
             </div>
           </li>
           <li className="list-group-item d-flex justify-content-between align-items-start">
             <div className="ms-2 me-auto">
-              We have limited free slots across Pune and PCMC and we do it on a
-              first come first serve basis.
+            {t('step_6')}
             </div>
           </li>
           <li className="list-group-item d-flex justify-content-between align-items-start">
             <div className="ms-2 me-auto">
-              Don't constantly call us and pressure us for urgent dates.
+            {t('step_7')}</div>
+          </li>
+          <li className="list-group-item d-flex justify-content-between align-items-start">
+            <div className="ms-2 me-auto">
+            {t('step_8')}
             </div>
           </li>
           <li className="list-group-item d-flex justify-content-between align-items-start">
             <div className="ms-2 me-auto">
-              If your cat is pregnant and if there is an emergency reach out to
-              other private vets or NGOs.
+            {t('step_9')}
             </div>
           </li>
           <li className="list-group-item d-flex justify-content-between align-items-start">
             <div className="ms-2 me-auto">
-              We give anti-rabies to all cats for free and is mandatory.
+            {t('step_10')}
             </div>
           </li>
           <li className="list-group-item d-flex justify-content-between align-items-start">
             <div className="ms-2 me-auto">
-              All Cats will be ear clipped and mandatory. If you wish not to ear
-              clip you have to send a letter to us.
+            {t('step_11')}</div>
+          </li>
+          <li className="list-group-item d-flex justify-content-between align-items-start">
+            <div className="ms-2 me-auto">
+            {t('step_12')}
             </div>
           </li>
           <li className="list-group-item d-flex justify-content-between align-items-start">
             <div className="ms-2 me-auto">
-            If you wish to do post-op yourself, you have to bring an e-collar during surgery.
-            </div>
+            {t('step_13')}</div>
           </li>
           <li className="list-group-item d-flex justify-content-between align-items-start">
             <div className="ms-2 me-auto">
-            Please send photos of all cats.
-            </div>
-          </li>
-          <li className="list-group-item d-flex justify-content-between align-items-start">
-            <div className="ms-2 me-auto">
-            Please ensure to take photos during admissions, picking up the cat after surgery, and after release.
-            </div>
-          </li>
-          <li className="list-group-item d-flex justify-content-between align-items-start">
-            <div className="ms-2 me-auto">
-            Please fill up the below form and we will get back to you with your slot dates.
-            </div>
+            {t('step_14')}</div>
           </li>
         </ol>
         <div className="form-check mt-2">
@@ -86,7 +82,7 @@ export default function Guidelines() {
             type="checkbox"
             defaultValue=""
             id="flexCheckChecked"
-            defaultChecked=""
+            // defaultChecked=""
           />
           <label className="form-check-label fw-bold" htmlFor="flexCheckChecked">
             I Agree
