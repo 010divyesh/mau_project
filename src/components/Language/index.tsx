@@ -1,7 +1,8 @@
-"use client"
+"use client";
 import { useLocale } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
+import "./style.css";
 
 export default function Lang() {
   const [isPending, startTransition] = useTransition();
@@ -15,29 +16,41 @@ export default function Lang() {
   };
 
   return (
-    <>
+    <main>
       <div className="background-container">
-        <h4 className="fw-bold text-center my-3">
-        Please select your language
+        <h4 className="fw-bold text-center pt-2">
+          Please select your language
         </h4>
         <div className="d-flex justify-content-around">
           <div>
-            <button type="button" className="btn btn-primary btn-lg" onClick={() => onSelectChange('en')}>
-            ENGLISH
+            <button
+              type="button"
+              className="btn btn-primary btn-lg"
+              onClick={() => onSelectChange("en")}
+            >
+              ENGLISH
             </button>
           </div>
           <div>
-            <button type="button" className="btn btn-primary btn-lg" onClick={() => onSelectChange('hi')}>
-            HINDI
+            <button
+              type="button"
+              className="btn btn-primary btn-lg"
+              onClick={() => onSelectChange("hi")}
+            >
+              हिंदी
             </button>
           </div>
           <div>
-            <button type="button" className="btn btn-primary btn-lg" onClick={() => onSelectChange('mh')}>
-            MARATHI
+            <button
+              type="button"
+              className="btn btn-primary btn-lg"
+              onClick={() => onSelectChange("mh")}
+            >
+              मराठी
             </button>
           </div>
         </div>
       </div>
-    </>
+    </main>
   );
 }
