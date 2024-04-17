@@ -1,5 +1,6 @@
 "use client";
 import { useTranslations } from "next-intl";
+import Link from "next/link";
 
 export default function Guidelines() {
   const t = useTranslations("Index.Guidelines");
@@ -63,8 +64,21 @@ export default function Guidelines() {
           I Agree
         </label>
       </div>
-      <div className="d-flex justify-content-end my-2">
-        <input className="btn btn-primary" type="button" value="Next"></input>
+      <div className="d-flex justify-content-between my-2">
+        <div>
+          <Link href="/">
+            <button className="btn btn-primary" type="button">
+              Back
+            </button>
+          </Link>
+        </div>
+        <div>
+        <Link href="/Add-Form">
+          <button className="btn btn-primary" type="button">
+            Next
+          </button>
+          </Link>
+        </div>
       </div>
     </div>
   );
