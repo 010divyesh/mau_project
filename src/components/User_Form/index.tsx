@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import classNames from "classnames";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
+import ReCAPTCHA from "react-google-recaptcha";
 import Link from "next/link";
 import { userDef } from "@/components/types.js";
 import { initValue } from "./config.js";
+import Image from "next/image";
 import FormField from "@/components/FormField";
 import { useTranslations } from "next-intl";
 
@@ -19,7 +21,7 @@ const SignupSchema = Yup.object().shape({
   //   location: Yup.string()
   //     .oneOf(["Pune", "PCMC"], "Please select a valid area")
   //     .required("Please select an area"),
-  name: Yup.string().min(2).max(25).required("Please enter your name"),
+  name: Yup.string().min(4).max(25).required("Please enter your name"),
 
   number: Yup.string()
     .matches(/^\d{10}$/, "Please enter a 10-digit number")
@@ -33,13 +35,16 @@ const SignupSchema = Yup.object().shape({
     .matches(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, "Please enter a valid email address")
     .required("Please enter your email address"),
 
-  house: Yup.string().min(5).max(25).required("Please enter valid address"),
+  house: Yup.string().min(5).max(50).required("Please enter valid address"),
 
   area: Yup.string().min(5).max(25).required("Please enter valid address"),
 
   landmark: Yup.string().min(5).max(25).required("Please enter valid address"),
 
-  pincode: Yup.string().min(6).max(6).required("Please enter valid pincode"),
+  pincode: Yup.string()
+    .min(6)
+    .max(6)
+    .required("Please enter your valid pincode"),
 
   adhar: Yup.string()
     .min(12)
@@ -52,14 +57,26 @@ const SignupSchema = Yup.object().shape({
     .required("Please enter your PAN card number"),
 });
 
-export default function UserForm({ submitBtnLable, user, title, save }: props) {
- 
+const UserForm: React.FC<props> = ({ submitBtnLable, user, save }) => {
+  const [isCaptchaVerified, setIsCaptchaVerified] = useState(false);
+
+  const handleCaptchaVerify = () => {
+    setIsCaptchaVerified(true);
+  };
+
+  const handleSubmit = (values: userDef) => {
+    if (isCaptchaVerified) {
+      save(values);
+    } else {
+      alert("Please verify reCAPTCHA.");
+    }
+  };
+
   const t = useTranslations("Index.Form");
- 
+
   return (
     <main>
-      <h5 className="fw-bold text-center my-3">{t("lable")}</h5>
-
+      <h4 className="fw-bold text-center my-2">{t("lable")}</h4>
       <Formik
         initialValues={user ? user : initValue}
         validationSchema={SignupSchema}
@@ -69,9 +86,27 @@ export default function UserForm({ submitBtnLable, user, title, save }: props) {
           <div className="container">
             <div className="d-flex justify-content-center">
               <Form
-                className="row g-3 card mt-1 p-3 col-md-6"
-                style={{ backgroundColor: "gainsboro" }}
+                className="row g-3 card my-2 p-3 col-md-6"
+                style={{ backgroundColor: "lightblue" }}
+                // gainboro
               >
+                {/* Image */}
+                <div>
+                  <Image
+                    src="/img/image.png"
+                    alt=""
+                    width={50}
+                    height={50}
+                    style={{
+                      position: "absolute",
+                      top: 0,
+                      right: 0,
+                      width: "70px",
+                      height: "70px",
+                    }}
+                  />
+                </div>
+
                 {/* for location */}
                 <div>
                   <label className="col-sm-2-col-form-label">
@@ -101,7 +136,7 @@ export default function UserForm({ submitBtnLable, user, title, save }: props) {
 
                 {/* for name */}
                 <FormField
-                  label="Full Name"
+                  label={t("name_1")}
                   name="name"
                   placeholder={t("name_field")}
                   type="text"
@@ -136,6 +171,14 @@ export default function UserForm({ submitBtnLable, user, title, save }: props) {
                   </div>
                 </div>
 
+                {values.number === values.alt_number &&
+                  values.number !== "" &&
+                  values.alt_number !== "" && (
+                    <div className="text-danger">
+                     {t("ph_not_same")}
+                    </div>
+                  )}
+
                 {/* for Email id */}
                 <div>
                   <FormField
@@ -157,15 +200,15 @@ export default function UserForm({ submitBtnLable, user, title, save }: props) {
                     </h6> */}
                     <div>
                       <label className="col-sm-2-col-form-label">
-                        <b>{t("address_1")}</b>
+                        <b>{t("address_1")} </b>
                       </label>
                     </div>
-                    {/* <label className="col-sm-2-col-form-label">
-                      Flat, House, Building, Apartment
+                    <label className="col-sm-2-col-form-label">
+                    {t("address_2")}
                     </label>
                     <Field
                       name="house"
-                      placeholder="Enter Your Address"
+                      placeholder={t("address_field")}
                       className={classNames("form-control", {
                         "is-invalid": touched.house && errors.house,
                       })}
@@ -173,14 +216,7 @@ export default function UserForm({ submitBtnLable, user, title, save }: props) {
                     />
                     {errors.house && touched.house && (
                       <div className="invalid-feedback">{errors.house}</div>
-                    )} */}
-                    <FormField
-                      label={t("address_2")}
-                      name="house"
-                      placeholder={t("address_field")}
-                      errors={errors}
-                      touched={touched}
-                    />
+                    )}
                   </div>
 
                   {/* area, street, sector */}
@@ -188,12 +224,12 @@ export default function UserForm({ submitBtnLable, user, title, save }: props) {
                     <div>
                       <label className="col-sm-2-col-form-label"></label>
                     </div>
-                    {/* <label className="col-sm-2-col-form-label">
-                      Area, street, Sector
+                    <label className="col-sm-2-col-form-label">
+                    {t("address_3")}
                     </label>
                     <Field
                       name="area"
-                      placeholder="Enter Your Address"
+                      placeholder={t("address_field")}
                       className={classNames("form-control", {
                         "is-invalid": touched.area && errors.area,
                       })}
@@ -201,24 +237,17 @@ export default function UserForm({ submitBtnLable, user, title, save }: props) {
                     />
                     {errors.area && touched.area && (
                       <div className="invalid-feedback">{errors.area}</div>
-                    )} */}
-                    <FormField
-                      label={t("address_3")}
-                      name="area"
-                      placeholder={t("address_field")}
-                      errors={errors}
-                      touched={touched}
-                    />
+                    )}
                   </div>
                 </div>
 
                 <div className="d-flex">
                   {/* landmark */}
                   <div className="flex-grow-1 me-2">
-                    {/* <label className="col-sm-2-col-form-label">Landmark</label>
+                    <label className="col-sm-2-col-form-label"> {t("address_4")}</label>
                     <Field
                       name="landmark"
-                      placeholder="Enter Your Address"
+                      placeholder={t("address_field")}
                       className={classNames("form-control", {
                         "is-invalid": touched.house && errors.house,
                       })}
@@ -226,23 +255,16 @@ export default function UserForm({ submitBtnLable, user, title, save }: props) {
                     />
                     {errors.landmark && touched.landmark && (
                       <div className="invalid-feedback">{errors.landmark}</div>
-                    )} */}
-                    <FormField
-                      label= {t("address_4")}
-                      name="landmark"
-                      placeholder={t("address_field")}
-                      errors={errors}
-                      touched={touched}
-                    />
+                    )}
                   </div>
 
-                  {/* area, street, sector */}
+                  {/* pincode */}
                   <div className="flex-grow-1 ms-2">
-                    {/* <label className="col-sm-2-col-form-label">Pincode</label>
+                    <label className="col-sm-2-col-form-label">{t("address_5")}</label>
                     <Field
                       name="pincode"
                       type="number"
-                      placeholder="Enter Your Pincode"
+                      placeholder={t("pincode_field")}
                       className={classNames("form-control", {
                         "is-invalid": touched.pincode && errors.pincode,
                       })}
@@ -250,15 +272,7 @@ export default function UserForm({ submitBtnLable, user, title, save }: props) {
                     />
                     {errors.pincode && touched.pincode && (
                       <div className="invalid-feedback">{errors.area}</div>
-                    )} */}
-                    <FormField
-                      label={t("address_5")}
-                      name="pincode"
-                      type="number"
-                      placeholder={t("pincode_field")}
-                      errors={errors}
-                      touched={touched}
-                    />
+                    )}
                   </div>
                 </div>
 
@@ -266,16 +280,16 @@ export default function UserForm({ submitBtnLable, user, title, save }: props) {
                 <div className="d-flex">
                   <div className="flex-grow-1 me-2">
                     <div>
-                     <label className="col-sm-2-col-form-label">
+                      <label className="col-sm-2-col-form-label">
                         <b>{t("no-of-cat")}</b>
                       </label>
                     </div>
                     {/* for male */}
-                    {/* <label className="col-sm-2-col-form-label">Male</label>
+                    <label className="col-sm-2-col-form-label">{t("male")}</label>
                     <Field
                       name="male"
                       type="number"
-                      placeholder="Number of Cats"
+                      placeholder={t("no_of_cat")}
                       className={classNames("form-control", {
                         "is-invalid": touched.gender && errors.gender,
                       })}
@@ -283,15 +297,7 @@ export default function UserForm({ submitBtnLable, user, title, save }: props) {
                     />
                     {errors.gender && touched.gender && (
                       <div className="invalid-feedback">{errors.gender}</div>
-                    )}  */}
-                    <FormField
-                      label={t("male")}
-                      name="male"
-                      type="number"
-                      placeholder={t("no_of_cat")}
-                      errors={errors}
-                      touched={touched}
-                    />
+                    )}
                   </div>
 
                   {/* for female */}
@@ -299,10 +305,11 @@ export default function UserForm({ submitBtnLable, user, title, save }: props) {
                     <div>
                       <label className="col-sm-2-col-form-label"></label>
                     </div>
-                    {/* <label className="col-sm-2-col-form-label">Female</label>
+                    <label className="col-sm-2-col-form-label">{t("female")}</label>
                     <Field
                       name="female"
-                      placeholder="Number of Cats"
+                      type="number"
+                      placeholder={t("no_of_cat")}
                       className={classNames("form-control", {
                         "is-invalid": touched.gender && errors.gender,
                       })}
@@ -310,15 +317,7 @@ export default function UserForm({ submitBtnLable, user, title, save }: props) {
                     />
                     {errors.gender && touched.gender && (
                       <div className="invalid-feedback">{errors.gender}</div>
-                    )} */}
-                    <FormField
-                      label={t("female")}
-                      name="female"
-                      type="number"
-                      placeholder={t("no_of_cat")}
-                      errors={errors}
-                      touched={touched}
-                    />
+                    )}
                   </div>
                 </div>
 
@@ -351,11 +350,31 @@ export default function UserForm({ submitBtnLable, user, title, save }: props) {
                   />
                 </div>
 
+                {/* Picture upload field  */}
+                <div>
+                  <label className="col-sm-2-col-form-label">
+                    <b>{t("uplod_pics")}</b>
+                  </label>
+
+                  <div className="form-control d-flex align-items-center">
+                    <input
+                      type="file"
+                      name="pictures"
+                      accept="image/*"
+                      className="form-control flex-grow-1"
+                      multiple // Allow multiple picture uploads
+                    />
+                    <button type="button" className="btn btn-primary ms-3">
+                    {t("upload")}
+                    </button>
+                  </div>
+                </div>
+
                 {/* for vaccination  */}
 
                 <div>
                   <label className="col-sm-2-col-form-label">
-                    <b>{t("vaccination-1")}</b>{t("vaccination-2")}
+                    <b> {t("vaccination-1")} </b> {t("vaccination-2")}
                   </label>
                   <div
                     style={{
@@ -392,16 +411,14 @@ export default function UserForm({ submitBtnLable, user, title, save }: props) {
                 </div>
 
                 {/* for adhar card number */}
-                <div>
-                  <FormField
-                      label={t("adhar")}
-                      name="adhar"
-                      type="number"
-                      placeholder={t("adhar_field")}
-                      errors={errors}
-                      touched={touched}
-                    />
-                </div>
+                <FormField
+                  label={t("adhar")}
+                  name="adhar"
+                  type="number"
+                  placeholder={t("adhar_field")}
+                  errors={errors}
+                  touched={touched}
+                />
 
                 {/* for pan card number */}
                 <div>
@@ -454,32 +471,19 @@ export default function UserForm({ submitBtnLable, user, title, save }: props) {
 
                 {values.transport === "yes" && (
                   <>
-                    <div>
-                      <label className="col-sm-2-col-form-label">
-                        <b>GPS Location</b>
-                      </label>
-                      <Field
-                        name="gpsLocation"
-                        placeholder="Paste your Google Location Here"
-                        className={classNames("form-control", {
-                          "is-invalid":
-                            touched.gpsLocation && errors.gpsLocation,
-                        })}
-                        style={{ fontStyle: "italic", fontSize: "small" }}
-                      />
-                      {errors.gpsLocation && touched.gpsLocation && (
-                        <div className="invalid-feedback">
-                          {errors.gpsLocation}
-                        </div>
-                      )}
-                    </div>
+                    <FormField
+                      label={t("gps_1")}
+                      name="gpsLocation"
+                      placeholder={t("gps_2")}
+                      errors={errors}
+                      touched={touched}
+                    />
 
                     {/* for traps */}
-
                     <div>
                       <label className="col-sm-2-col-form-label">
-                        <b>Need of Traps</b>
-                        <i> (Only if Feral Cats are wary of People)</i>
+                        <b>{t("traps_1")}</b>
+                        <i> {t("traps_2")}</i>
                       </label>
                       <div className="radio-group">
                         <div className="form-check form-check-inline">
@@ -489,7 +493,7 @@ export default function UserForm({ submitBtnLable, user, title, save }: props) {
                             value="yes"
                             className="form-check-input"
                           />
-                          <label className="form-check-label">Yes</label>
+                          <label className="form-check-label">{t("yes")}</label>
                         </div>
                         <div className="form-check form-check-inline">
                           <Field
@@ -498,7 +502,7 @@ export default function UserForm({ submitBtnLable, user, title, save }: props) {
                             value="no"
                             className="form-check-input"
                           />
-                          <label className="form-check-label">No</label>
+                          <label className="form-check-label">{t("no")}</label>
                         </div>
                       </div>
                     </div>
@@ -521,7 +525,6 @@ export default function UserForm({ submitBtnLable, user, title, save }: props) {
                       {t("post-op-2")}
                       </i>
                     </div>
-                    {/* <i> (Only if Feral Cats are wary of People)</i> */}
                   </label>
 
                   <div className="radio-group">
@@ -545,6 +548,12 @@ export default function UserForm({ submitBtnLable, user, title, save }: props) {
                     </div>
                   </div>
                 </div>
+
+                {/* for recaptch */}
+                <ReCAPTCHA
+                  sitekey="6Ldku7spAAAAAIB1X6iEOfsmEQnYsx_SRj0yIrpg"
+                  onChange={handleCaptchaVerify}
+                />
 
                 {/* for buttons */}
 
@@ -580,4 +589,6 @@ export default function UserForm({ submitBtnLable, user, title, save }: props) {
       </Formik>
     </main>
   );
-}
+};
+
+export default UserForm;

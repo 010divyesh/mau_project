@@ -61,21 +61,21 @@ export default function Guidelines() {
           // defaultChecked=""
         />
         <label className="form-check-label fw-bold" htmlFor="flexCheckChecked">
-          I Agree
+        {t("agree")}
         </label>
       </div>
       <div className="d-flex justify-content-between my-2">
         <div>
           <Link href="/">
             <button className="btn btn-primary" type="button">
-              Back
+            {t("back_btn")}
             </button>
           </Link>
         </div>
         <div>
         <Link href="/Add-Form">
           <button className="btn btn-primary" type="button">
-            Next
+          {t("nxt_btn")}
           </button>
           </Link>
         </div>
