@@ -1,16 +1,13 @@
 "use client";
 import { useLocale } from "next-intl";
 import { useRouter } from "next/navigation";
-import { useTransition } from "react";
-// import "./style.css";
 
 export default function Lang() {
-  // const [isPending, startTransition] = useTransition();
   const router = useRouter();
   const localActive = useLocale();
 
   const onSelectChange = (locale: string) => {
-      router.replace(`/${locale}/Guidelines`);
+    router.replace(`/${locale}/Guidelines`);
   };
 
   return (

@@ -1,9 +1,15 @@
 "use client";
 import { useTranslations } from "next-intl";
-import Link from "next/link";
+import { Link } from "@/i18n";
+import { useState } from "react";
 
 export default function Guidelines() {
+  const [isChecked, setIsChecked] = useState(false);
   const t = useTranslations("Index.Guidelines");
+
+  const handleCheckboxChange = (e) => {
+    setIsChecked(e.target.checked);
+  };
 
   return (
     <div className="container">
@@ -56,27 +62,32 @@ export default function Guidelines() {
         <input
           className="form-check-input"
           type="checkbox"
-          defaultValue=""
+          value=""
           id="flexCheckChecked"
-          // defaultChecked=""
+          checked={isChecked}
+          onChange={handleCheckboxChange}
         />
         <label className="form-check-label fw-bold" htmlFor="flexCheckChecked">
-        {t("agree")}
+          {t("agree")}
         </label>
       </div>
       <div className="d-flex justify-content-between my-2">
         <div>
           <Link href="/">
             <button className="btn btn-primary" type="button">
-            {t("back_btn")}
+              {t("back_btn")}
             </button>
           </Link>
         </div>
         <div>
-        <Link href="/Add-Form">
-          <button className="btn btn-primary" type="button">
-          {t("nxt_btn")}
-          </button>
+          <Link href={isChecked ? "/Add-Form" : "#"}>
+            <button
+              className="btn btn-primary"
+              type="button"
+              disabled={!isChecked}
+            >
+              {t("nxt_btn")}
+            </button>
           </Link>
         </div>
       </div>
