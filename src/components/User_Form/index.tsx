@@ -9,6 +9,11 @@ import { initValue } from "./config.js";
 import Image from "next/image";
 import FormField from "@/components/FormField";
 import { useTranslations } from "next-intl";
+import { getDatabase, ref, set } from "firebase/database";
+import { app } from "@/components/firebase";
+
+
+const db = getDatabase(app);
 
 interface props {
   submitBtnLable: string;
