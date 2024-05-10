@@ -80,7 +80,7 @@ export default function Guidelines() {
           </Link>
         </div>
         <div>
-          <Link href={isChecked ? "/Add-Form" : "#"}>
+          <Link href={isChecked ? "/New-Request" : "#"}>
             <button
               className="btn btn-primary"
               type="button"

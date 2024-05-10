@@ -18,10 +18,13 @@
     "next-intl": "^3.11.1",
     "node": "^18.20.2",
     "npm": "^10.5.2",
+    "otp-input-react": "^0.3.0",
     "react": "^18.2.0",
     "react-bootstrap": "^2.10.2",
     "react-dom": "^18.2.0",
     "react-google-recaptcha": "^3.1.0",
+    "react-otp-input": "^3.1.1",
+    "react-phone-input-2": "^2.15.1",
     "yup": "^1.4.0"
   },
   "devDependencies": {

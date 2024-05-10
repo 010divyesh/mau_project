@@ -46,13 +46,13 @@ export default function Nav() {
                 <Link
                   className="fw-bold nav-link"
                   aria-current="page"
-                  href="/Admin_Login"
+                  href="/SignUpWithOTP"
                 >
                   ADMIN
                 </Link>
               </li>
               <li className="nav-item" onClick={closeMenu}>
-                <Link className="fw-bold nav-link" href="#">
+                <Link className="fw-bold nav-link" href="/SignUpWithOTP">
                   USER
                 </Link>
               </li>
