@@ -4,6 +4,7 @@ import "bootstrap/dist/css/bootstrap.css";
 import "./globals.css";
 import Nav from "@/components/Navbar";
 import { NextIntlClientProvider, useMessages } from "next-intl";
+import Footer from "@/components/Footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -32,6 +33,7 @@ export default function RootLayout({
       <NextIntlClientProvider locale={locale} messages={messages}>
         <Nav/>
         <div className="background-container">{children}</div>
+        <Footer/>
         </NextIntlClientProvider>
       </body>
     </html>);

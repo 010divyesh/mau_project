@@ -1,0 +1,17 @@
+.footer-container {
+    border-top: 1px solid #ddd;
+    padding: 20px 8px;
+    text-align: center;
+    /* position: fixed; */
+    text-decoration: none;
+    bottom: 0;
+    width: 100%;
+    background: #efefef;
+    margin-top: 20px;
+    color: black;
+    
+}
+.footer-link{
+    color: black;
+    text-decoration: none;
+}
